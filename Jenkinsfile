@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage ('Clone Stage') {
             steps {
-                git 'https://gitlab.com/jmlhmd/datacamp_docker_angular.git'
+                git 'https://github.com/nawreswear/datacamp_docker_angular-master.git'
             }
         }
         stage ('Docker Build') {
