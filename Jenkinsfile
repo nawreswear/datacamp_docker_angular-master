@@ -21,6 +21,8 @@ pipeline {
                 git config --global pack.threads "1"
                 rm -rf nawreswear/aston_villa
                 git clone  git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                git remote set-url origin git@github.com:nawreswear/datacamp_docker_angular-master.git
+
                 '''
             }
         }
