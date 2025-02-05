@@ -20,8 +20,8 @@ pipeline {
                 git config --global pack.packSizeLimit 2g
                 git config --global pack.threads "1"
                 rm -rf datacamp_docker_angular
-                git clone --mirror git@gitlab.com:jmlhmd/datacamp_docker_angular.git
-                git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                git clone --mirror https://github.com/nawreswear/datacamp_docker_angular-master.git
+                git clone --depth=1 https://github.com/nawreswear/datacamp_docker_angular-master.git
                 '''
             }
         }
