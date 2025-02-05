@@ -17,7 +17,7 @@ pipeline {
             git config --global http.lowSpeedTime 999999
             git config --global http.postBuffer 524288000
             rm -rf datacamp_docker_angular
-            git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+            GIT_TRACE=1 GIT_CURL_VERBOSE=1 git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
             '''
             }
         }
