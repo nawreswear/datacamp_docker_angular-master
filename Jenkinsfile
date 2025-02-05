@@ -12,13 +12,8 @@ pipeline {
         stage('Clone Stage') {
     steps {
         sh '''
-        #!/bin/bash
-        set -e  # Exit immediately if a command exits with a non-zero status. Remove if you want to ignore git config failures.
-
-        # Configure Git (apply only to this repository by cd-ing into it)
-        # Global configurations can cause unexpected side effects.
-        # Consider using environment variables (e.g., GIT_HTTP_POSTBUFFER) instead of global config if you want to limit the scope.
-
+        git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+        set -e  
         git config --global http.postBuffer 524288000
         git config --global http.lowSpeedLimit 0
         git config --global http.lowSpeedTime 999999
@@ -28,9 +23,6 @@ pipeline {
         git config --global pack.threads "1"
         git config --global pack.windowMemory 256m
         git config --global pack.packSizeLimit 256m
-
-        # Clone the repository
-        git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
 
         '''
     }
