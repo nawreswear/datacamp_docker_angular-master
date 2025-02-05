@@ -9,24 +9,31 @@ pipeline {
         DOCKER_TAG = getVersion() 
     }
     stages {
-        stage('Clone Stage') {
-    steps {
-        sh '''
-        git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
-        set -e  
-        git config --global http.postBuffer 524288000
-        git config --global http.lowSpeedLimit 0
-        git config --global http.lowSpeedTime 999999
-        git config --global core.compression 0
-        git config --global pack.windowMemory 2g
-        git config --global pack.packSizeLimit 2g
-        git config --global pack.threads "1"
-        git config --global pack.windowMemory 256m
-        git config --global pack.packSizeLimit 256m
+       stage('Clone Stage') {
+            steps {
+                sh '''
+                #!/bin/bash
+                set -e
 
-        '''
-    }
-}
+                # Configure Git for large repositories and network stability
+                git config --global http.postBuffer 524288000
+                git config --global core.compression 0
+                git config --global pack.git.windowMemory "1024m"
+                git config --global pack.git.packSizeLimit "2g"
+                git config --global pack.git.threads "2"
+                git config --global receive.packMemory "1024m"
+                git config --global transfer.buffer 5242880
+                git config --global http.timeout 300
+
+                # Shallow clone (if full history is not required)
+                # git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+
+                # Full clone (use if shallow clone is not sufficient)
+                git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                '''
+            }
+        }
+
 
 
         stage ('Docker Build') {
