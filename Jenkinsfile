@@ -12,7 +12,7 @@ pipeline {
         stage ('Clone Stage') {
             steps {
                 sh '''
-                git clone https://github.com/nawreswear/datacamp_docker_angular-master.git
+                git clone https://github.com/nawreswear/datacamp_docker_angular-master.git new_folder
                 '''
             }
         }
