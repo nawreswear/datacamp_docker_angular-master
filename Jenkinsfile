@@ -11,9 +11,14 @@ pipeline {
     stages {
         stage ('Clone Stage') {
             steps {
-                sh '''
-                git clone --depth=1 https://gitlab.com/jmlhmd/datacamp_docker_angular.git
-                '''
+            sh '''
+            git config --global http.lowSpeedLimit 0
+            git config --global core.compression 0
+            git config --global http.lowSpeedTime 999999
+            git config --global http.postBuffer 524288000
+            rm -rf datacamp_docker_angular
+            git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+            '''
             }
         }
 
