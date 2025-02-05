@@ -12,7 +12,7 @@ pipeline {
         stage ('Clone Stage') {
             steps {
                 sh '''
-                git clone https://gitlab.com/jmlhmd/datacamp_docker_angular.git
+                git clone --depth=1 https://gitlab.com/jmlhmd/datacamp_docker_angular.git
                 '''
             }
         }
