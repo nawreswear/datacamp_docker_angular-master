@@ -12,9 +12,7 @@ pipeline {
         stage ('Clone Stage') {
             steps {
                 sh '''
-                eval `ssh-agent -s`
-                ssh-add ~/.ssh/id_rsa
-                git clone git@github.com:nawreswear/datacamp_docker_angular-master.git
+                git clone https://github.com/nawreswear/datacamp_docker_angular-master.git
                 '''
             }
         }
