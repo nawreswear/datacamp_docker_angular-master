@@ -11,14 +11,18 @@ pipeline {
     stages {
         stage ('Clone Stage') {
             steps {
-            sh '''
-            git config --global http.lowSpeedLimit 0
-            git config --global core.compression 0
-            git config --global http.lowSpeedTime 999999
-            git config --global http.postBuffer 524288000
-            rm -rf datacamp_docker_angular
-            GIT_TRACE=1 GIT_CURL_VERBOSE=1 git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
-            '''
+                sh '''
+                git config --global http.postBuffer 524288000
+                git config --global http.lowSpeedLimit 0
+                git config --global http.lowSpeedTime 999999
+                git config --global core.compression 0
+                git config --global pack.windowMemory 2g
+                git config --global pack.packSizeLimit 2g
+                git config --global pack.threads "1"
+                rm -rf datacamp_docker_angular
+                git clone --mirror git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                git clone --depth=1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                '''
             }
         }
 
