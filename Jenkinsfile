@@ -1,7 +1,7 @@
 pipeline { 
     agent any 
     tools { 
-        jdk 'JDK8' 
+        jdk 'Openjdk17' 
     }
     environment { 
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' 
@@ -14,22 +14,13 @@ pipeline {
                 sh '''
                 #!/bin/bash
                 set -e
-
-                # Configure Git for large repositories and network stability
                 git config --global http.postBuffer 524288000
-                git config --global core.compression 0
-                git config --global pack.git.windowMemory "1024m"
-                git config --global pack.git.packSizeLimit "2g"
-                git config --global pack.git.threads "2"
-                git config --global receive.packMemory "1024m"
-                git config --global transfer.buffer 5242880
-                git config --global http.timeout 300
 
                 # Shallow clone (if full history is not required)
-                # git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                 git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
 
                 # Full clone (use if shallow clone is not sufficient)
-                git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                #git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
                 '''
             }
         }
