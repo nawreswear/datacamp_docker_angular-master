@@ -24,14 +24,13 @@ pipeline {
             }
         }
 
-        stage('Clone Stage') {
+         stage('Clone') {
             steps {
-                script {
-                   git 'https://gitlab.com/jmlhmd/datacamp_docker_angular.git'
+                sshagent(['github-ssh-key']) {
+                    sh 'git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git'
                 }
             }
         }
-
         stage('Docker Build') {
             steps {
                 sh 'docker build -t nawreswear/aston_villa:${DOCKER_TAG} .'
