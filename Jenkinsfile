@@ -12,16 +12,13 @@ pipeline {
        stage('Clone Stage') {
             steps {
                 sh '''
-                #!/bin/bash
-                #set -e
                 git config --global http.postBuffer 524288000
-
-                # Shallow clone (if full history is not required)
-                #git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
-
-                # Full clone (use if shallow clone is not sufficient)
-                git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
-
+                echo "Vérification de la connexion SSH avec GitHub"
+                ssh -T git@github.com
+                echo "Mise à jour du référentiel git"
+                git fetch --all
+                #git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
+                
                 '''
             }
         }
