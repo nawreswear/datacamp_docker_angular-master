@@ -3,52 +3,71 @@ pipeline {
     tools { 
         jdk 'Openjdk17' 
     }
+
     environment { 
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' 
         GIT_SSH_COMMAND = 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
-        DOCKER_TAG = getVersion() 
+        DOCKER_TAG = ""  // Déclaration pour éviter les erreurs
     }
+
     stages {
-       stage('Clone Stage') {
+
+        stage('Initialisation') {
             steps {
-                sh '''
-                git config --global http.postBuffer 524288000
-                echo "Vérification de la connexion SSH avec GitHub"
-                ssh -T git@github.com
-                echo "Mise à jour du référentiel git"
-                git fetch --all
-                echo "Mesure du temps de clonage"
-                time git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
-
-
-                #git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
-                
-                '''
+                script {
+                    DOCKER_TAG = getVersion()
+                }
             }
         }
 
+        stage('Nettoyage') {
+            steps {
+                cleanWs()
+            }
+        }
 
+        stage('Clone Stage') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh '''
+                    git config --global http.postBuffer 524288000
+                    echo "Vérification de la connexion SSH avec GitHub"
+                    ssh -T git@github.com || true
+                    echo "Mise à jour du référentiel git"
+                    git fetch --all
+                    echo "Mesure du temps de clonage"
+                    time git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
+                    '''
+                }
+            }
+        }
 
-        stage ('Docker Build') {
+        stage('Docker Build') {
             steps {
                 sh 'docker build -t nawreswear/aston_villa:${DOCKER_TAG} .'
             }
         } 
-        stage ('DockerHub Push') {
+
+        stage('DockerHub Push') {
             steps {
-                sh 'sudo docker login -u nawreswear -p zoo23821014'
-                sh 'sudo docker push nawreswear/aston_villa:${DOCKER_TAG}'
+                withCredentials([string(credentialsId: 'docker-hub-password', variable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u nawreswear --password-stdin'
+                }
+                sh 'docker push nawreswear/aston_villa:${DOCKER_TAG}'
             }
         } 
-        stage ('Deploy') {
+
+        stage('Déploiement') {
             steps {
-                sh "ssh -o StrictHostKeyChecking=no vagrant@192.168.182.100 'sudo docker pull nawreswear/aston_villa:${DOCKER_TAG}'"
-                sh "ssh -o StrictHostKeyChecking=no vagrant@192.168.182.100 'sudo docker run --name aston_villa -d nawreswear/aston_villa:${DOCKER_TAG}'"
+                sh """
+                ssh -o StrictHostKeyChecking=no vagrant@192.168.182.100 'docker pull nawreswear/aston_villa:${DOCKER_TAG}'
+                ssh -o StrictHostKeyChecking=no vagrant@192.168.182.100 'docker run --name aston_villa -d nawreswear/aston_villa:${DOCKER_TAG}'
+                """
             }
         }
     }
 }
 
 def getVersion() {
-    return sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+    return sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
 }
