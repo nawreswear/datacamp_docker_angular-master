@@ -10,19 +10,6 @@ pipeline {
     }
 
     stages {
-        stage('Initialisation') {
-            steps {
-                script {
-                    DOCKER_TAG = getVersion()
-                }
-            }
-        }
-
-        stage('Nettoyage') {
-            steps {
-                cleanWs()
-            }
-        }
 
          stage('Clone') {
             steps {
