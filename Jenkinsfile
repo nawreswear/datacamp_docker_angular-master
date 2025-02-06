@@ -27,8 +27,7 @@ pipeline {
         stage('Clone Stage') {
             steps {
                 script {
-                    // Clone repo using SSH
-                    sh 'git clone git@gitlab.com:jmlhmd/datacamp_docker_angular.git'
+                   git 'https://gitlab.com/jmlhmd/datacamp_docker_angular.git'
                 }
             }
         }
