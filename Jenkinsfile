@@ -29,7 +29,7 @@ pipeline {
         stage('Clone Stage') {
             steps {
                 
-                sh 'git clone --depth 1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git'
+                sh 'git clone  https://gitlab.com/jmlhmd/datacamp_docker_angular.git'
                
             
             }
