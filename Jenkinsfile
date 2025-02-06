@@ -13,14 +13,15 @@ pipeline {
             steps {
                 sh '''
                 #!/bin/bash
-                set -e
+                #set -e
                 git config --global http.postBuffer 524288000
 
                 # Shallow clone (if full history is not required)
-                 git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                #git clone --depth 1 --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
 
                 # Full clone (use if shallow clone is not sufficient)
-                #git clone --verbose --progress git@gitlab.com:jmlhmd/datacamp_docker_angular.git
+                git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
+
                 '''
             }
         }
