@@ -17,6 +17,10 @@ pipeline {
                 ssh -T git@github.com
                 echo "Mise à jour du référentiel git"
                 git fetch --all
+                echo "Mesure du temps de clonage"
+                time git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
+
+
                 #git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
                 
                 '''
