@@ -28,17 +28,10 @@ pipeline {
 
         stage('Clone Stage') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh '''
-                    git config --global http.postBuffer 524288000
-                    echo "Vérification de la connexion SSH avec GitHub"
-                    ssh -T git@github.com || true
-                    echo "Mise à jour du référentiel git"
-                    git fetch --all
-                    echo "Mesure du temps de clonage"
-                    time git clone --depth 1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
-                    '''
-                }
+                
+                sh 'git clone --depth 1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git'
+               
+            
             }
         }
 
@@ -50,9 +43,9 @@ pipeline {
 
         stage('DockerHub Push') {
             steps {
-                withCredentials([string(credentialsId: 'docker-hub-password', variable: 'DOCKER_PASSWORD')]) {
-                    sh 'echo "$DOCKER_PASSWORD" | docker login -u nawreswear --password-stdin'
-                }
+                
+                sh ' docker login -u nawreswear --zoo23821014'
+                
                 sh 'docker push nawreswear/aston_villa:${DOCKER_TAG}'
             }
         } 
