@@ -28,12 +28,6 @@ pipeline {
             steps {
                 script {
                     // Clone repo using SSH
-                    sh '''
-                        mkdir -p ~/.ssh
-                        echo "votre_clé_privée_ssh" > ~/.ssh/id_rsa
-                        chmod 600 ~/.ssh/id_rsa
-                        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-                    '''
                     sh 'git clone git@gitlab.com:jmlhmd/datacamp_docker_angular.git'
                 }
             }
