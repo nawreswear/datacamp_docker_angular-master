@@ -36,7 +36,7 @@ pipeline {
                     echo "Mise à jour du référentiel git"
                     git fetch --all
                     echo "Mesure du temps de clonage"
-                    time git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git
+                    time git clone --depth 1 git@gitlab.com:jmlhmd/datacamp_docker_angular.git
                     '''
                 }
             }
