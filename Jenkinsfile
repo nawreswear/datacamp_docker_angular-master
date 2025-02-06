@@ -1,12 +1,11 @@
-pipeline { 
-    agent any 
-    tools { 
-        jdk 'Openjdk17' 
+pipeline {
+    agent any
+    tools {
+        jdk 'Openjdk17'
     }
 
-    environment { 
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' 
-        GIT_SSH_COMMAND = 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
+    environment {
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         DOCKER_TAG = ""  // Déclaration pour éviter les erreurs
     }
 
@@ -28,10 +27,17 @@ pipeline {
 
         stage('Clone Stage') {
             steps {
-                
-                sh 'git clone  https://gitlab.com/jmlhmd/datacamp_docker_angular.git'
-               
-            
+                script {
+                    // Charger la clé SSH directement dans l'environnement
+                    sh '''
+                        mkdir -p ~/.ssh
+                        echo "votre_clé_privée_ssh" > ~/.ssh/id_rsa
+                        chmod 600 ~/.ssh/id_rsa
+                        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+                    '''
+                    // Cloner le dépôt via SSH
+                    sh 'git clone git@gitlab.com:jmlhmd/datacamp_docker_angular.git'
+                }
             }
         }
 
@@ -39,16 +45,14 @@ pipeline {
             steps {
                 sh 'docker build -t nawreswear/aston_villa:${DOCKER_TAG} .'
             }
-        } 
+        }
 
         stage('DockerHub Push') {
             steps {
-                
-                sh ' docker login -u nawreswear --zoo23821014'
-                
+                sh 'docker login -u nawreswear --password zoo23821014'
                 sh 'docker push nawreswear/aston_villa:${DOCKER_TAG}'
             }
-        } 
+        }
 
         stage('Déploiement') {
             steps {
