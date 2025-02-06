@@ -27,6 +27,11 @@ pipeline {
          stage('Clone') {
             steps {
                 sshagent(['github-ssh-key']) {
+                    sh 'git config --global http.postBuffer 524288000'
+                    sh 'git config --global http.lowSpeedLimit 0'
+                    sh 'git config --global http.lowSpeedTime 999999'
+                    sh 'git config --global http.postBuffer 524288000'
+                    sh 'git config --global http.sslBackend openssl'
                     sh 'git clone --depth 1 git@github.com:nawreswear/datacamp_docker_angular-master.git'
                 }
             }
